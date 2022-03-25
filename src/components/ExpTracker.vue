@@ -16,59 +16,57 @@
 
   <br />
   <div class="infoblock">
-    <label class="infolabel" id="progressToNextLevel"
-      >Progress towards next Level: {{ expData.progressToNextLevel }}</label
-    >
-    <br />
-    <label class="infolabel" id="currentProgress"
-      >currentProgress: {{ expData.currentProgress }}</label
-    >
-    <br />
-    <label class="infolabel" id="weeklyProgress"
-      >weeklyProgess: {{ expData.weeklyProgress }}</label
-    >
-    <br />
-    <label class="infolabel" id="dailyProgress"
-      >dailyProgress: {{ expData.dailyProgress }}</label
-    >
-    <br />
-    <label class="infolabel" id="nextLevelAt"
-      >nextLevelAt: {{ expData.nextLevelAt }}</label
-    >
-    <br />
-    <label class="infolabel" id="SeasonRank">{{
-      expData.currentSeasonPassLevel
-    }}</label>
+    <div class="infolabels">
+      <ul class="list">
+        <li><label class="infolabel" id="progressToNextLevel">Progress towards next Level:</label></li>
+        <li><label class="infolabel" id="currentProgress">currentProgress:</label></li>
+        <li><label class="infolabel" id="weeklyProgress">weeklyProgess:</label></li>
+        <li><label class="infolabel" id="dailyProgress">dailyProgress:</label></li>
+        <li><label class="infolabel" id="nextLevelAt">nextLevelAt: </label></li>
+        <li><label class="infolabel" id="SeasonRank">current Season Pass Level:</label></li>
+      </ul>
+    </div>
+     
+    <div class="infovalues">
+       <ul class="list">
+        <li><label class="infolabel" id="progressToNextLevel">{{ expData.progressToNextLevel }}</label></li>
+        <li><label class="infolabel" id="currentProgress">{{ expData.currentProgress }}</label></li>
+        <li><label class="infolabel" id="weeklyProgress">{{ expData.weeklyProgress }}</label></li>
+        <li><label class="infolabel" id="dailyProgress"> {{ expData.dailyProgress }}</label></li>
+        <li><label class="infolabel" id="nextLevelAt"> {{ expData.nextLevelAt }}</label></li>
+        <li><label class="infolabel" id="SeasonRank">{{ expData.currentSeasonPassLevel }}</label></li>
+      </ul>
+    </div>
+    
+    <div class="progressBars">
+      <div id="seasonalRankBar" data-type="fill" data-fill-background-extrude="0" class="ldBar label-center" data-img="icon.png"><p class="infotext">Seasonal Rank</p></div>
+      <div id="powerBonusBar" data-type="fill" data-fill-background-extrude="0" class="ldBar label-center" data-img="icon.png"><p class="infotext">Power Bonus</p></div>
+    </div>
   </div>
+
   <br />
   <br />
   <br />
-  <div class="progressBars">
+  <!--div class="progressBars">
     <div
       id="seasonalRankBar"
       data-type="fill"
       data-fill-background-extrude="0"
       class="ldBar label-center"
       data-img="icon.png"
-    ></div>
+    ><p class="infotext">Seasonal Rank</p></div>
     <div
       id="powerBonusBar"
       data-type="fill"
       data-fill-background-extrude="0"
       class="ldBar label-center"
       data-img="icon.png"
-    ></div>
-  </div>
+    ><p class="infotext">Power Bonus</p></div>
+    
+  </div-->
 
   <div v-if="isVisible">
-    <span
-      class="toggle-wrapper"
-      role="checkbox"
-      :aria-checked="autoRefresh.toString()"
-      tabindex="0"
-      @click="toggle"
-      @keydown.space.prevent="toggle"
-    >
+    <span class="toggle-wrapper" role="checkbox" :aria-checked="autoRefresh.toString()" tabindex="0" @click="toggle" @keydown.space.prevent="toggle">
       <span class="toggle-background" :class="backgroundStyles" />
       <span class="toggle-indicator" :style="indicatorStyles" />
     </span>
@@ -248,6 +246,8 @@ export default {
 </script>
 
 <style>
+
+/*/////////Toggles///////////*/
 .gold-mid {
   background-color: #5dce59;
 }
@@ -290,6 +290,8 @@ export default {
   transition: transform 0.4s ease;
 }
 
+/*////////////////////////*/
+
 .backscreen {
   background-color: #383838;
 }
@@ -297,15 +299,44 @@ export default {
 .infoblock {
   margin: 3%;
   padding: 1%;
+  width:92%;
+  height: 40%;
   background-color: #505050;
   border-style: hidden;
   border-radius: 3pt;
   font-family: "Open Sans", sans-serif;
+  display: inline-block;
 }
 
-.infolabel {
-  margin-top: 0.25%;
-  display: block;
+.list{
+  list-style: none;
+}
+
+.infovalues{
+  float: left;
+  font-size: 2rem;
+}
+
+.infoblock .infolabels{
+  float: left;
+  font-size: 2rem;
+}
+
+.progressBars {
+  align-items: center;
+  display: flex;
+}
+
+.progressBars .ldBar {
+  margin: auto;
+}
+
+.progressBars .infotext{
+  font-family: "Open Sans", sans-serif;
+  font-size: 2rem;
+  color: white;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .control {
@@ -315,27 +346,6 @@ export default {
   display: flex;
   /*background-image: url("../assets/header.png");*/
 }
-
-/*.control .labelInput {
-  margin-left: 3%;
-  min-height: 80%;
-  width: 84%;
-  min-width: 84%;
-  opacity: 0.5;
-  font-size: xx-large;
-  border: none;
-  padding: 0;
-}
-
-
-
-.control .buttonInput {
-  min-width: 10%;
-  max-width:30%;
-  opacity: 0.9;
-  background-image: url('../assets/brain.png');
-  background: none;
-}*/
 
 .control .labelInput{
   border: none;
@@ -365,18 +375,11 @@ export default {
   opacity: 0.8;
 }
 
-.progressBars {
-  align-items: center;
-  display: flex;
-}
-
-.progressBars .ldBar {
-  margin: auto;
-}
 
 .ldBar {
   position: relative;
 }
+
 .ldBar.label-center > .ldBar-label {
   position: absolute;
   top: 50%;
@@ -385,11 +388,14 @@ export default {
   transform: translate(-50%, -50%);
   text-shadow: 0 0 3px #fff;
 }
+
 .ldBar-label:after {
   content: "%";
   display: inline;
 }
+
 .ldBar.no-percent .ldBar-label:after {
   content: "";
 }
+
 </style>
