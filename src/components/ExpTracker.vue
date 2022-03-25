@@ -10,7 +10,7 @@
       v-model="username"
     />
     <button class="buttonInput" @click="GetMembershipData">
-      <img src="../assets/brain.png">
+      <img src="brain.png">
     </button>
   </div>
 
