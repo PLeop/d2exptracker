@@ -4,6 +4,7 @@
     <input
       class="labelInput"
       type="text"
+      placeholder="username#1234"
       @create="InitBar"
       @click="ResetInput"
       @keyup.enter="GetMembershipData"
@@ -44,27 +45,6 @@
     </div>
   </div>
 
-  <br />
-  <br />
-  <br />
-  <!--div class="progressBars">
-    <div
-      id="seasonalRankBar"
-      data-type="fill"
-      data-fill-background-extrude="0"
-      class="ldBar label-center"
-      data-img="icon.png"
-    ><p class="infotext">Seasonal Rank</p></div>
-    <div
-      id="powerBonusBar"
-      data-type="fill"
-      data-fill-background-extrude="0"
-      class="ldBar label-center"
-      data-img="icon.png"
-    ><p class="infotext">Power Bonus</p></div>
-    
-  </div-->
-
   <div v-if="isVisible">
     <span class="toggle-wrapper" role="checkbox" :aria-checked="autoRefresh.toString()" tabindex="0" @click="toggle" @keydown.space.prevent="toggle">
       <span class="toggle-background" :class="backgroundStyles" />
@@ -89,7 +69,7 @@ export default {
   name: "ExpTracker",
   data: function () {
     return {
-      username: "username#1234",
+      username: "",
       membershipId: "",
       membershipType: "",
       apiKey: "338fc46b3cf140b79315df6993eb2d7e",
@@ -189,7 +169,7 @@ export default {
           ref.expData.currentPercentage =
             (ref.expData.progressToNextLevel / ref.expData.nextLevelAt) * 100;
           ref.expData.currentSeasonPassLevel =
-            ref.expData.currentProgress / 100000;
+            (ref.expData.currentProgress + 125500) / 100000;
           ref.isVisible = true;
           ref.InitBar();
         },
@@ -219,25 +199,35 @@ export default {
     },
     //
     ExpMessurement: function () {
+      var ref = this;
       if (!this.messurementRunning) {
         this.messurementRunning = true;
+        this.messureStatus = "Stop Tracker";
         console.log(this.messurementRunning);
         window.timer = 0;
-        this.GetExpData;
+        this.GetExpData();
         this.startExp = this.expData.currentProgress;
         window.eM = setInterval(function () {
           window.timer = window.timer + 100;
+          if(window.timer % 10000 == 0){
+            ref.GetExpData();
+          }
         }, 100);
       } else {
         clearInterval(window.eM);
-        this.GetExpData;
-        var endExp = this.expData.currentProgress;
-        var hour = window.timer / 3600000;
-        var expHr = (endExp - this.startExp) / hour;
-        window.timer = 0;
-        this.startExp = 0;
+        this.GetExpData();
         this.messurementRunning = false;
-        console.log(expHr);
+        setTimeout(function(){
+          console.log("gathering Data");
+          ref.messureStatus = "Start Tracker";
+          var endExp = ref.expData.currentProgress;
+          var hour = window.timer / 3600000;
+          var expHr = (endExp - ref.startExp) / hour;
+          window.timer = 0;
+          ref.startExp = 0;
+          console.log(expHr); 
+        }, 5000);
+               
         //Ausgabe Exp/hr
       }
     },
