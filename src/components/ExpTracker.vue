@@ -388,4 +388,38 @@ export default {
   content: "";
 }
 
+@media only screen and (max-width: 800px) {
+
+  [class*="infoblock"] {
+  margin: 3%;
+  padding: 1%;
+  width:92%;
+  height: 80%;
+  background-color: #505050;
+  border-style: hidden;
+  border-radius: 3pt;
+  font-family: "Open Sans", sans-serif;
+  display: block;
+}
+
+[class*="list"]{
+  list-style: none;
+}
+
+[class*="infovalues"]{
+  float: left;
+  font-size: 1.5rem;
+}
+
+infoblock infolabels{
+  float: left;
+  font-size: 1.5rem;
+}
+
+[class*="progressBars"] {
+  align-items: center;
+  display: flex;
+}
+}
+
 </style>
