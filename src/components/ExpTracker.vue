@@ -16,28 +16,48 @@
   </div>
 
   <br />
+  <div class="ackzent">
   <div class="infoblock">
     <div class="infolabels">
       <ul class="list">
-        <li><label class="infolabel" id="progressToNextLevel">Progress towards next Level:</label></li>
-        <li><label class="infolabel" id="currentProgress">currentProgress:</label></li>
-        <li><label class="infolabel" id="weeklyProgress">weeklyProgess:</label></li>
-        <li><label class="infolabel" id="dailyProgress">dailyProgress:</label></li>
-        <li><label class="infolabel" id="nextLevelAt">nextLevelAt: </label></li>
-        <li><label class="infolabel" id="SeasonRank">current Season Pass Level:</label></li>
+        <li>
+          <label class="infolabel" id="progressToNextLevel">Progress towards next Level:</label>
+          <label class="valuelabel" id="progressToNextLevel" style="text-align:right">{{ expData.progressToNextLevel }}</label>
+        </li>
+        <li>
+          <label class="infolabel" id="currentProgress">currentProgress:</label>
+          <label class="valuelabel" id="currentProgress" style="text-align:right">{{ expData.currentProgress }}</label>
+          </li>
+        <li>
+          <label class="infolabel" id="weeklyProgress">weeklyProgess:</label>
+          <label class="valuelabel" id="weeklyProgress">{{ expData.weeklyProgress }}</label>
+          </li>
+        <li>
+          <label class="infolabel" id="dailyProgress">dailyProgress:</label>
+          <label class="valuelabel" id="dailyProgress"> {{ expData.dailyProgress }}</label>
+          </li>
+        <li>
+          <label class="infolabel" id="nextLevelAt">nextLevelAt: </label>
+          <label class="valuelabel" id="nextLevelAt"> {{ expData.nextLevelAt }}</label>
+          </li>
+        <li>
+          <label class="infolabel" id="SeasonRank">current Season Pass Level:</label>
+          <label class="valuelabel" id="SeasonRank">{{ expData.currentSeasonPassLevel }}</label>
+          </li>
       </ul>
     </div>
      
-    <div class="infovalues">
+    <!--div class="infovalues">
        <ul class="list">
-        <li><label class="infolabel" id="progressToNextLevel">{{ expData.progressToNextLevel }}</label></li>
-        <li><label class="infolabel" id="currentProgress">{{ expData.currentProgress }}</label></li>
-        <li><label class="infolabel" id="weeklyProgress">{{ expData.weeklyProgress }}</label></li>
-        <li><label class="infolabel" id="dailyProgress"> {{ expData.dailyProgress }}</label></li>
-        <li><label class="infolabel" id="nextLevelAt"> {{ expData.nextLevelAt }}</label></li>
-        <li><label class="infolabel" id="SeasonRank">{{ expData.currentSeasonPassLevel }}</label></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
       </ul>
-    </div>
+    </div-->
+    
     
     <div class="progressBars">
       <div id="seasonalRankBar" data-type="fill" data-fill-background-extrude="0" class="ldBar label-center" data-img="icon.png"><p class="infotext">Seasonal Rank</p></div>
@@ -45,21 +65,21 @@
     </div>
   </div>
 
-  <div v-if="isVisible">
-    <span class="toggle-wrapper" role="checkbox" :aria-checked="autoRefresh.toString()" tabindex="0" @click="toggle" @keydown.space.prevent="toggle">
-      <span class="toggle-background" :class="backgroundStyles" />
-      <span class="toggle-indicator" :style="indicatorStyles" />
-    </span>
-    <p>Auto Refresh</p>
-    <br />
-    <br />
+  <div class="functionality"> 
+    <div v-if="isVisible">
+      <span class="toggle-wrapper" role="checkbox" :aria-checked="autoRefresh.toString()" tabindex="0" @click="toggle" @keydown.space.prevent="toggle">
+        <span class="toggle-background" :class="backgroundStyles" />
+        <span class="toggle-indicator" :style="indicatorStyles" />
+      </span>
+      <p>Auto Refresh</p>
+      <br />
+      <br />
+    </div>
+    <button id="startMessung" @click="ExpMessurement">{{ messureStatus }}</button>
+
   </div>
-  <br />
-  <br />
-  <br />
-  <br />
-  <button id="startMessung" @click="ExpMessurement">{{ messureStatus }}</button>
   </div>
+</div>
 </template>
 
 <script>
@@ -286,8 +306,49 @@ export default {
   background-color: #383838;
 }
 
+.ackzent{
+   margin: 3%;
+  padding: 1%;
+  width:92%;
+  height:80vh;
+  background-color: #505050;
+  border-style: hidden;
+  border-radius: 3pt;
+  font-family: "Open Sans", sans-serif;
+}
+
+.infoblock{
+  display: block;
+}
+
+
+
+.list{
+  list-style: none;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.infoblock .infolabels .valuelabel{
+  float: right;
+}
+
+
+
+@media only screen and (min-width: 800px) {
+
+.ackzent{
+   margin: 3%;
+  padding: 1%;
+  width:92%;
+  height: 80vh;
+  background-color: #505050;
+  border-style: hidden;
+  border-radius: 3pt;
+  font-family: "Open Sans", sans-serif;
+}
+
 .infoblock {
-  margin: 3%;
   padding: 1%;
   width:92%;
   height: 40%;
@@ -300,6 +361,8 @@ export default {
 
 .list{
   list-style: none;
+  font-size: 2rem;
+  color: white;
 }
 
 .infovalues{
@@ -312,9 +375,23 @@ export default {
   font-size: 2rem;
 }
 
+.functionality{
+  margin: 3%;
+  padding: 1%;
+}
+
+}
+
 .progressBars {
   align-items: center;
   display: flex;
+  font-size:1.5rem;
+}
+
+@media only screen and (max-width:799px){
+.infoblock .progressBars{
+  margin-top:10%;
+}
 }
 
 .progressBars .ldBar {
@@ -388,38 +465,5 @@ export default {
   content: "";
 }
 
-@media only screen and (max-width: 800px) {
-
-  [class*="infoblock"] {
-  margin: 3%;
-  padding: 1%;
-  width:92%;
-  height: 80%;
-  background-color: #505050;
-  border-style: hidden;
-  border-radius: 3pt;
-  font-family: "Open Sans", sans-serif;
-  display: block;
-}
-
-[class*="list"]{
-  list-style: none;
-}
-
-[class*="infovalues"]{
-  float: left;
-  font-size: 1.5rem;
-}
-
-infoblock infolabels{
-  float: left;
-  font-size: 1.5rem;
-}
-
-[class*="progressBars"] {
-  align-items: center;
-  display: flex;
-}
-}
 
 </style>
