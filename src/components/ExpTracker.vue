@@ -21,7 +21,7 @@
     <div class="infolabels">
       <ul class="list">
         <li>
-          <label class="infolabel" id="progressToNextLevel">Progress towards next Level:</label>
+          <label class="infolabel" id="progressToNextLevel">Towards next Level:  </label>
           <label class="valuelabel" id="progressToNextLevel" style="text-align:right">{{ expData.progressToNextLevel }}</label>
         </li>
         <li>
@@ -41,23 +41,11 @@
           <label class="valuelabel" id="nextLevelAt"> {{ expData.nextLevelAt }}</label>
           </li>
         <li>
-          <label class="infolabel" id="SeasonRank">current Season Pass Level:</label>
+          <label class="infolabel" id="SeasonRank">Season Pass Level:  </label>
           <label class="valuelabel" id="SeasonRank">{{ expData.currentSeasonPassLevel }}</label>
           </li>
       </ul>
     </div>
-     
-    <!--div class="infovalues">
-       <ul class="list">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
-    </div-->
-    
     
     <div class="progressBars">
       <div id="seasonalRankBar" data-type="fill" data-fill-background-extrude="0" class="ldBar label-center" data-img="icon.png"><p class="infotext">Seasonal Rank</p></div>
@@ -65,17 +53,21 @@
     </div>
   </div>
 
-  <div class="functionality"> 
-    <div v-if="isVisible">
+  <div class="functionality" v-if="isVisible"> 
+    <div class="autoRefresher">
       <span class="toggle-wrapper" role="checkbox" :aria-checked="autoRefresh.toString()" tabindex="0" @click="toggle" @keydown.space.prevent="toggle">
         <span class="toggle-background" :class="backgroundStyles" />
         <span class="toggle-indicator" :style="indicatorStyles" />
       </span>
       <p>Auto Refresh</p>
-      <br />
-      <br />
     </div>
-    <button id="startMessung" @click="ExpMessurement">{{ messureStatus }}</button>
+    <!--div class="loader" v-if="messurementRunning"><label>I'm a loader</label></div>
+    <div class="loader" v-if="autoRefresh"></div-->
+    <div class="lds-ring" v-if="messurementRunning">EXPMessurement<div></div><div></div><div></div><div></div></div>
+    <div class="lds-ring" v-if="autoRefresh">autoRefresh<div></div><div></div><div></div><div></div></div>
+    <div class="Messurement">
+      <button id="startMessung" @click="ExpMessurement">{{ messureStatus }}</button>
+    </div>
 
   </div>
   </div>
@@ -324,6 +316,7 @@ export default {
 
 
 .list{
+  padding-left: 0%;
   list-style: none;
   font-size: 1.5rem;
   color: white;
@@ -331,6 +324,30 @@ export default {
 
 .infoblock .infolabels .valuelabel{
   float: right;
+}
+
+.functionality{
+  margin-top: 25%;
+    align-items: center;
+  display: flex;
+}
+
+.functionality .autoRefresher{
+   margin: auto;
+  display: inline-block;
+  align-items: center;
+}
+
+.functionality .Messurement{
+    margin: auto;
+  display: inline-block;
+  align-items: center;
+}
+
+.functionality .loader{
+    margin: auto;
+  display: inline-block;
+  align-items: center;
 }
 
 
@@ -349,6 +366,7 @@ export default {
 }
 
 .infoblock {
+  margin-left: 3%;
   padding: 1%;
   width:92%;
   height: 40%;
@@ -377,7 +395,7 @@ export default {
 
 .functionality{
   margin: 3%;
-  padding: 1%;
+  margin-top: 5%;
 }
 
 }
@@ -388,7 +406,7 @@ export default {
   font-size:1.5rem;
 }
 
-@media only screen and (max-width:799px){
+@media only screen and (max-width:800px){
 .infoblock .progressBars{
   margin-top:10%;
 }
@@ -396,6 +414,8 @@ export default {
 
 .progressBars .ldBar {
   margin: auto;
+  display: inline-block;
+  align-items: center;
 }
 
 .progressBars .infotext{
@@ -463,6 +483,64 @@ export default {
 
 .ldBar.no-percent .ldBar-label:after {
   content: "";
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #2adf33;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #dfc;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #dfc transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 
