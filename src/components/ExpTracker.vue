@@ -8,6 +8,7 @@
       @create="InitBar"
       @click="ResetInput"
       @keyup.enter="GetMembershipData"
+      @keyup="LiveSearch"
       v-model="username"
     />
     <button class="buttonInput" @click="GetMembershipData">
@@ -67,6 +68,7 @@
     <div class="lds-ring" v-if="autoRefresh">autoRefresh<div></div><div></div><div></div><div></div></div>
     <div class="Messurement">
       <button id="startMessung" @click="ExpMessurement">{{ messureStatus }}</button>
+      <label>{{ expPerHour }}</label>
     </div>
 
   </div>
@@ -88,7 +90,8 @@ export default {
       messureStatus: "Start Tracker",
       messurementRunning: false,
       timer: 0,
-      startExp: 1,
+      startExp: 0,
+      expPerHour: 0,
       expData: {
         progressToNextLevel: 0,
         currentProgress: 0,
@@ -96,6 +99,7 @@ export default {
         dailyProgress: 0,
         nextLevelAt: 0,
         currentPercentage: 0,
+        currentPercentageSP: 0,
         currentSeasonPassLevel: 0,
       },
       autoRefresh: false,
@@ -138,9 +142,8 @@ export default {
         pbBar.set(0);
       }
 
-      var seasonalPercentage = this.expData.currentSeasonPassLevel;
-      if (seasonalPercentage != null) {
-        seasonalRankBar.set((seasonalPercentage % 1) * 100);
+      if (this.expData.currentPercentageSP != null) {
+        seasonalRankBar.set(this.expData.currentPercentageSP);
       } else {
         seasonalRankBar.set(0);
       }
@@ -166,7 +169,7 @@ export default {
           this.membershipType +
           "/Profile/" +
           this.membershipId +
-          "/?components=104",
+          "/?components=104%2C202%2C1100%2C100",
         headers: {
           "X-API-Key": this.apiKey,
         },
@@ -174,14 +177,28 @@ export default {
         contentType: "application/json",
         dataType: "json",
         success: function (expRes) {
-          ref.FillExpData(
-            expRes.Response.profileProgression.data.seasonalArtifact
-              .powerBonusProgression
-          );
-          ref.expData.currentPercentage =
-            (ref.expData.progressToNextLevel / ref.expData.nextLevelAt) * 100;
-          ref.expData.currentSeasonPassLevel =
-            (ref.expData.currentProgress + 125500) / 100000;
+          console.log(expRes);
+          //1787069365 -> Prestige 
+          //2069932355 -> SP bis 100
+          var profileProgression = expRes.Response.profileProgression.data;
+          ref.FillExpData(profileProgression.seasonalArtifact.powerBonusProgression);
+          var expData = ref.expData;
+          var characterProgression = expRes.Response.characterProgressions.data[Object.keys(expRes.Response.characterProgressions.data)[0]];
+          var seasonPassLevel = characterProgression.progressions['2069932355'].level;
+
+          if(seasonPassLevel >= 100)
+          {
+            seasonPassLevel += characterProgression.progressions['1787069365'].level;
+            expData.currentPercentageSP =  characterProgression.progressions['1787069365'].progressToNextLevel / 1000;
+          }
+          else
+          {
+            expData.currentPercentageSP =  characterProgression.progressions['2069932355'].progressToNextLevel / 1000;
+          }
+
+          expData.currentSeasonPassLevel = seasonPassLevel;
+         
+          expData.currentPercentage = (expData.progressToNextLevel / expData.nextLevelAt) * 100;
           ref.isVisible = true;
           ref.InitBar();
         },
@@ -242,6 +259,29 @@ export default {
                
         //Ausgabe Exp/hr
       }
+    },
+    LiveSearch: function(){
+       $.ajax({
+        url:
+          "https://www.bungie.net/Platform/User/Search/GlobalName/0/",
+        headers: {
+          "X-API-Key": this.apiKey,
+        },
+        type: "POST", // added data type
+        contentType: "application/json",
+        dataType: "json",
+         data: JSON.stringify({ "displayNamePrefix": this.username }),
+        success: function (response) {
+          var res = response.Response.searchResults
+          var counter = 0;
+          for (var key in res) {
+            if(counter <=5){
+              console.log(res[key].bungieGlobalDisplayName + '#' + res[key].bungieGlobalDisplayNameCode);
+              counter++;
+            }           
+          }
+        },
+      });
     },
   },
 };
